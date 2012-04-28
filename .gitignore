@@ -1,0 +1,11 @@
+*~
+src/
+report/.deps/
+report/tex/inc/
+report/tex/*.aux
+report/tex/*.bbl
+report/tex/*.blg
+report/tex/*.log
+report/tex/*.out
+report/tex/*.toc
+report/tex/*.pdf

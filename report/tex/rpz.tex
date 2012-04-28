@@ -1,0 +1,223 @@
+%% Преамбула TeX-файла
+
+% 1. Стиль и язык
+\documentclass[utf8x, 12pt]{G7-32} % Стиль (по умолчанию будет 14pt)
+
+% Остальные стандартные настройки убраны в preamble-std.tex
+\include{preamble-std}
+
+\begin{document}
+
+\frontmatter % выключает нумерацию ВСЕГО; здесь начинаются ненумерованные главы: реферат, введение, глоссарий, сокращения и прочее
+
+% Команды \breakingbeforechapters и \nonbreakingbeforechapters
+% управляют разрывом страницы перед главами.
+% По-умолчанию страница разрывается.
+
+\nobreakingbeforechapters
+% \breakingbeforechapters
+
+
+\begin{center}
+Отчет по лабораторной работе \\ по курсу \textit{Модели оценки качества} \\ Вариант 17-12 
+\end{center}
+\begin{flushright}
+студент: Миникс И.В.\\ группа: ИУ7-101
+\end{flushright}
+
+\section{Формулировка задачи}
+
+В ВС, содержащей N процессоров и M каналов обмена данными, постоянно находятся K задач. Разработать модель (исходную и с применением укрупнения моделей) оценивающую производительность системы с учетом отказов и восстановлений процессоров и каналов. Имеется не более L ремонтных бригад, которые ремонтируют отказывающие устройства с бесприоритетной дисциплиной. 
+
+Сравнить полученные результаты с результатами имитационного моделирования. Интенсивность отказов, восстановлений, средние времена обработки сообщения и среднее время обдумывания известны и задаются пользователем. Известно также количество процессоров, каналов и задач.
+
+Построить графики зависимостей выходных результатов от исходных данных. С помощью имитационной модели исследовать влияние функций распределения интервалов времени прихода требований и времени обслуживания на выходные результаты.
+
+
+\section {Исходная модель}
+На рисунке~\ref{fig:main} представлена схема исходной модели системы.
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{inc/dia/main}
+\caption{Исходная модель}
+\label{fig:main}
+\end{figure}
+
+\newpage
+\subsection {Параметры системы}
+\begin {enumerate}[]
+\item K --- число задач.
+\item M --- число процессоров.
+\item N --- число каналов.
+\item L --- число ремонтных бригад.
+\item $\lambda$ --- интенсивность обдумывания.
+\item $\mu$ --- интенсивность обработки задачи на процессорной фазе.
+\item $\nu$ -- интенсивность обработки задачи на канальной фазе.
+\item $\alpha$ --- интенсивность отказа процессоров.
+\item $\beta$ --- интенсивность восстановления процессоров.
+\item $\gamma$ --- интенсивность отказа каналов.
+\item $\delta$ --- интенсивность восстановления каналов.
+\end{enumerate}
+
+
+
+\section{Моделирование отказов и восстановлений}
+Состояние системы будем описывать вектором $ \xi (t) = (\xi_{1}(t),\,\xi_{2}(t))$, где $\xi_{1}(t)$ - число неисправных процессоров в момент времени $t$, $\xi_{2}(t)$ - число неисправных каналов в момент времени $t$.
+
+На рисунке~\ref{fig:broke-graph} показана структура фрагмента графа состояний системы, где $\beta_{ij}=\beta\frac{i}{i+j}min\left\lbrace i+j,L\right\rbrace$, $\delta_{ij}=\delta\frac{j}{i+j}min\left\lbrace i+j,L\right\rbrace$. 
+\begin{figure}[ht]
+\centering
+\includegraphics[height=5cm]{inc/dia/broke-graph}
+\caption{Структура фрагмента графа состояний системы}
+\label{fig:broke-graph}
+\end{figure}
+
+Проведем укрупнение состояний сисетмы. Объединим в одно макросостояние все врешины графа, у которых одинаковым является первый компонент $\xi_{1}(t)$~--- число неисправных процессоров. Полученный граф представлен на рисунке~\ref{fig:broke-proc}, где $\beta_i=\beta\sum\limits_{j=0}^N\pi_j\frac{i}{i+j}min\left\lbrace i+j,L\right\rbrace$, $\pi_j$~--- вероятность того, что отказали ровно j каналов.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{inc/dia/broke-proc}
+\caption{Граф состояний системы}
+\label{fig:broke-proc}
+\end{figure}
+
+Тогда выражения для определенияя вероятностей стационарных состояний примут вид:
+
+\begin{equation}
+\label{eq:broke-proc}
+\left\{
+   \begin{array}{lcl}
+	p_{0} = \left( 1 + \dfrac{N \alpha}{\beta_1} +  ... + \dfrac{N! \alpha^{N}}{\prod \limits_{i=1}^N \beta_i} \right) ^{-1} \\
+	p_{i} = p_{0} \dfrac{\alpha^{i}\prod \limits_{j=1}^{i} (N-j+1)}{\prod \limits_{j=1}^i \beta^{j}}, \quad i = \overline{1,N}  \\ 
+	\beta_i=\beta\sum\limits_{j=0}^N\pi_j\frac{i}{i+j}min\left\lbrace i+j,L\right\rbrace
+   \end{array}
+\right.
+\end{equation}
+ 
+Аналогичным образом объединим в одно макросостояние все врешины графа, у которых одинаковым является второй компонент $\xi_{2}(t)$~--- число неисправных каналов. Полученный граф представлен на рисунке~\ref{fig:broke-chan}, а выражения для определенияя вероятностей стационарных состояний примут вид:
+
+\begin{equation}
+\label{eq:broke-chan}
+\left\{
+   \begin{array}{lcl}
+	\pi_{0} = \left( 1 + \dfrac{M \gamma}{\delta_1} +  ... + \dfrac{M! \gamma^{M}}{\prod \limits_{i=1}^M \delta_i} \right) ^{-1} \\
+	\pi_{i} = \pi_{0} \dfrac{\gamma^{i}\prod \limits_{j=1}^{i} (N-j+1)}{\prod \limits_{j=1}^i \delta^{j}}, \quad i = \overline{1,M}  \\ 
+	\delta_j=\delta\sum\limits_{i=0}^M p_i\frac{j}{i+j}min\left\lbrace i+j,L\right\rbrace
+   \end{array}
+\right.
+\end{equation}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{inc/dia/broke-chan}
+\caption{Граф состояний системы}
+\label{fig:broke-chan}
+\end{figure}
+
+Применяя формулы~\ref{eq:broke-proc} и~\ref{eq:broke-chan} итеративно получим вероятности отказов процессоров и каналов в системе. В качестве начального приближения можно взять $\pi_i=\frac{1}{M}$
+
+\newpage
+
+\section{Укрупнение модели}
+
+Заменим исходную модель агрегированной однофазной моделью АМ1 (см. рисунок~\ref{fig:AM1}). В агрегированный узел объединена подсистема включающая в себя процессоры и каналы. Интенсивность обслуживания в этом узле зависит от числа находящихся в нем заявок.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[height=5cm]{inc/dia/AM1}
+\caption{Укрупненная модель АМ1}
+\label{fig:AM1}
+\end{figure}
+
+Граф состояний полученной системы представлен на рисунке~\ref{fig:graphAM1}. Производительность системы может быть вычислена по формулам:
+
+
+\begin{equation}
+\label{eq:AM1}
+\left\{
+   \begin{array}{lcl}
+	\hat{\pi}_{0} = \left( 1 + \dfrac{K \lambda}{\xi_1} +  ... + \dfrac{K! \lambda^{K}}{\prod \limits_{i=1}^K \xi_i} \right) ^{-1} \\
+	\hat{\pi}_{i} = \hat{\pi}_{0} \dfrac{\lambda^{i}\prod \limits_{j=1}^{i} (K-j+1)}{\prod \limits_{j=1}^i \xi_{j}}, \quad i = \overline{1,M}  \\ 
+	\xi_{ср}^{*}=\sum \limits_{i=1}^K \xi_i \hat{\pi_i}
+   \end{array}
+\right.
+\end{equation}
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{inc/dia/graphAM1}
+\caption{Граф состояний модели АМ1}
+\label{fig:graphAM1}
+\end{figure}
+
+Однако, чтобы воспользоваться приведенными формулами, необходимо знать параметры связи $\mu_i$. Чтобы их найти рассмотрим укрупненную модель АМ2 структура и граф состояний которой показаны на рисунках~\ref{fig:AM2} и~\ref{fig:graphAM2}. За состояние системы примем количество заявок на процессорной фазе, а интенсивности переходов могут быть выражены по формулам:
+
+\begin{equation}
+\label{eq:mu}
+\mu_i = \mu \sum \limits_{j=0}^M p_j min \left\lbrace i, j \right\rbrace
+\end{equation}
+
+\begin{equation}
+\label{eq:nu}
+\nu_i = \nu \sum \limits_{j=0}^N \pi_j min \left\lbrace K-i, j \right\rbrace
+\end{equation}
+
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[height=4.5cm]{inc/dia/AM2}
+\caption{Укрупненная модель АМ2}
+\label{fig:AM2}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{inc/dia/graphAM2}
+\caption{Граф состояний модели АМ2}
+\label{fig:graphAM2}
+\end{figure}
+
+
+Параметр связи может вычислен по следующим формулам:
+
+
+\begin{equation}
+\label{eq:AM2}
+\left\{
+   \begin{array}{lcl}
+	\hat{p}_{0} = \left( 1 + \dfrac{\nu_1}{\mu_1} +  ... + \dfrac{\prod \limits_{i=1}^n \nu_i}{\prod \limits_{i=1}^n \mu_i} \right) ^{-1} \\
+	\hat{p}_{i} = \hat{p}_{0} \dfrac{\prod \limits_{j=1}^{i} (\nu_i)}{\prod \limits_{j=1}^i \mu_{j}}, \quad i = \overline{1,n}  \\ 
+	\xi_n = \sum \limits_{i=1}^n \hat{p}_i \mu_i
+   \end{array}
+\right.
+\end{equation}
+
+
+\section{Окончательная расчетная схема}
+Последовательность расчета производительности системы должна быть следующей:
+
+\begin{enumerate}
+\item По формулам~\ref{eq:broke-proc} и ~\ref{eq:broke-chan} вычислить $\pi_i, i=\overline{0,N}$ и $p_i, i=\overline{0,M} $.
+\item По формулам~\ref{eq:mu},~\ref{eq:nu} и~\ref{eq:AM2} вычислить $\xi_n, n=\overline{1,K}$.
+\item Вычислить $\xi^{*}$ по формулам~\ref{eq:AM1}.
+\end{enumerate}
+
+\mainmatter % это включает нумерацию глав и секций в документе ниже
+
+
+\backmatter %% Здесь заканчивается нумерованная часть документа и начинаются ссылки и
+            %% заключение
+
+
+
+\appendix   % Тут идут приложения
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
