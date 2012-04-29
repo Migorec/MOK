@@ -1,0 +1,51 @@
+Name:                MOK
+
+Version:             0.1
+
+-- A short (one-line) description of the package.
+-- Synopsis:            
+
+-- A longer description of the package.
+-- Description:         
+
+-- The license under which the package is released.
+License:             BSD3
+
+-- The file containing the license text.
+License-file:        LICENSE
+
+-- The package author(s).
+Author:              MigOrec
+
+-- An email address to which users can send suggestions, bug reports,
+-- and patches.
+Maintainer:          MigOrec@gmail.com
+
+-- A copyright notice.
+-- Copyright:           
+
+-- Category:            
+
+Build-type:          Simple
+
+-- Extra files to be distributed with the package, such as examples or
+-- a README.
+-- Extra-source-files:  
+
+-- Constraint on the version of Cabal needed to build this package.
+Cabal-version:       >=1.2
+
+
+Executable MOK
+  -- .hs or .lhs file containing the Main module.
+  Main-is: Main.hs             
+  
+  -- Packages needed in order to build this package.
+  Build-depends: base, mtl, haskell98, aivika       
+  
+  -- Modules not exported by this package.
+  Other-modules: Model.Model, Model.Imitational       
+  
+  -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
+  -- Build-tools:         
+  
