@@ -87,8 +87,8 @@
 \label{eq:broke-proc}
 \left\{
    \begin{array}{lcl}
-	p_{0} = \left( 1 + \dfrac{N \alpha}{\beta_1} +  ... + \dfrac{N! \alpha^{N}}{\prod \limits_{i=1}^N \beta_i} \right) ^{-1} \\
-	p_{i} = p_{0} \dfrac{\alpha^{i}\prod \limits_{j=1}^{i} (N-j+1)}{\prod \limits_{j=1}^i \beta^{j}}, \quad i = \overline{1,N}  \\ 
+	p_{0} = \left( 1 + \dfrac{M \alpha}{\beta_1} +  ... + \dfrac{M! \alpha^{M}}{\prod \limits_{i=1}^M \beta_i} \right) ^{-1} \\
+	p_{i} = p_{0} \dfrac{\alpha^{i}\prod \limits_{j=1}^{i} (M-j+1)}{\prod \limits_{j=1}^i \beta^{j}}, \quad i = \overline{1,M}  \\ 
 	\beta_i=\beta\sum\limits_{j=0}^N\pi_j\frac{i}{i+j}min\left\lbrace i+j,L\right\rbrace
    \end{array}
 \right.
@@ -100,8 +100,8 @@
 \label{eq:broke-chan}
 \left\{
    \begin{array}{lcl}
-	\pi_{0} = \left( 1 + \dfrac{M \gamma}{\delta_1} +  ... + \dfrac{M! \gamma^{M}}{\prod \limits_{i=1}^M \delta_i} \right) ^{-1} \\
-	\pi_{i} = \pi_{0} \dfrac{\gamma^{i}\prod \limits_{j=1}^{i} (N-j+1)}{\prod \limits_{j=1}^i \delta^{j}}, \quad i = \overline{1,M}  \\ 
+	\pi_{0} = \left( 1 + \dfrac{N \gamma}{\delta_1} +  ... + \dfrac{N! \gamma^{N}}{\prod \limits_{i=1}^N \delta_i} \right) ^{-1} \\
+	\pi_{i} = \pi_{0} \dfrac{\gamma^{i}\prod \limits_{j=1}^{i} (N-j+1)}{\prod \limits_{j=1}^i \delta^{j}}, \quad i = \overline{1,N}  \\ 
 	\delta_j=\delta\sum\limits_{i=0}^M p_i\frac{j}{i+j}min\left\lbrace i+j,L\right\rbrace
    \end{array}
 \right.
