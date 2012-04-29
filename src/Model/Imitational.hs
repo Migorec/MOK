@@ -1,4 +1,4 @@
-module Model.Imitational where
+module Model.Imitational (imitate) where
 
 import Random
 import Control.Monad
