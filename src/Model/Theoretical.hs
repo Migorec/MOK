@@ -50,3 +50,32 @@ breakProb param = iter initVal
                     in  if (maximum $ zipWith (\p p' -> abs $ p - p') cP cP') < 0.01
                         then (pP',cP')
                         else iter cP' 
+                        
+                        
+xi :: MParam -> ([Double],[Double]) -> Int  -> Double
+xi param (ps,pis) num = sum $ zipWith (*) hatPs mus
+    where
+          mus = map (\i -> mu param * (sum $ zipWith (\p j -> p * (min i (fromIntegral $ m param - j))) 
+                                                   ps [0.. fromIntegral $ m param])) 
+                    [1 .. fromIntegral num] 
+          nus = map (\i -> nu param * (sum $ zipWith (\pi j -> pi * (min (fromIntegral num - i + 1) 
+                                                                         (fromIntegral $ n param - j))) 
+                                                   pis [0.. fromIntegral $ n param])) 
+                    [1 .. fromIntegral num] 
+          summands = map (\i -> (product $ take i nus) / (product $ take i mus)) [1 .. num]
+          hatP0 = 1/(1 + (sum summands))
+          hatPs = map (hatP0 *) summands
+          
+xiStar :: MParam -> [Double] -> Double
+xiStar param xis = sum $ zipWith (*) xis hatPis
+    where ks = [fromIntegral $ k param .. 1]
+          summands = map (\i -> (lambda param)^i * 
+                                (product $ take i ks) / 
+                                (product $ take i xis)) [1..fromIntegral $ k param]
+          hatPi0 = 1/(1 + (sum summands))
+          hatPis = map (hatPi0 *) summands
+          
+solve :: MParam -> Double
+solve param = xiStar param xis
+    where (ps,pis) = breakProb param
+          xis = map (xi param (ps,pis)) [1 .. k param]
