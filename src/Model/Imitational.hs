@@ -147,7 +147,8 @@ model param (ps,cs)=
                  let system :: Dynamics Double
                      system = do x <- readRef workTime
                                  n <- readRef reqDone
-                                 return $ (fromIntegral n) / x 
+                                 t <- stoptime
+                                 return $ (fromIntegral n) / t 
 
                  return system
                  

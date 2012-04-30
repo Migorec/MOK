@@ -23,7 +23,7 @@ procProb param cP = p0:(map (p0*) summands)
                                                                       * min (i+j) (fromIntegral $ l param))
                                                          cP [0 .. fromIntegral $ n param])
                       ) [1.. fromIntegral $ m param]
-          ms = [fromIntegral $ m param .. 1]
+          ms = reverse [1..fromIntegral $ m param ]
           summands = map (\j -> (alpha param)^j * 
                                 (product $ take j ms) / 
                                 (product $ take j betas) ) [1..m param]
@@ -35,7 +35,7 @@ chanProb param pP = pi0:(map (pi0*) summands)
                                                                      * min (i+j) (fromIntegral $ l param))
                                                          pP [0 .. fromIntegral $ m param])
                       ) [1.. fromIntegral $ n param]
-          ns = [fromIntegral $ n param .. 1]
+          ns = reverse [1..fromIntegral $ n param]
           summands = map (\j -> (alpha param)^j * 
                                 (product $ take j ns) / 
                                 (product $ take j deltas) ) [1..n param]
@@ -44,7 +44,7 @@ chanProb param pP = pi0:(map (pi0*) summands)
 
 breakProb :: MParam -> ([Double],[Double])
 breakProb param = iter initVal
-    where initVal = replicate (n param) (1 / (fromIntegral $ n param))
+    where initVal = replicate (n param) (1 / (fromIntegral $ n param))--1 : (replicate (n param ) 0) --replicate (n param) (1 / (fromIntegral $ n param))
           iter cP = let pP' = procProb param cP
                         cP' = chanProb param pP'
                     in  if (maximum $ zipWith (\p p' -> abs $ p - p') cP cP') < 0.01
@@ -68,7 +68,7 @@ xi param (ps,pis) num = sum $ zipWith (*) hatPs mus
           
 xiStar :: MParam -> [Double] -> Double
 xiStar param xis = sum $ zipWith (*) xis hatPis
-    where ks = [fromIntegral $ k param .. 1]
+    where ks = reverse [1 .. fromIntegral $ k param ]
           summands = map (\i -> (lambda param)^i * 
                                 (product $ take i ks) / 
                                 (product $ take i xis)) [1..fromIntegral $ k param]
