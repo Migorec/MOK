@@ -137,7 +137,7 @@
 \left\{
    \begin{array}{lcl}
 	\hat{\pi}_{0} = \left( 1 + \dfrac{K \lambda}{\xi_1} +  ... + \dfrac{K! \lambda^{K}}{\prod \limits_{i=1}^K \xi_i} \right) ^{-1} \\
-	\hat{\pi}_{i} = \hat{\pi}_{0} \dfrac{\lambda^{i}\prod \limits_{j=1}^{i} (K-j+1)}{\prod \limits_{j=1}^i \xi_{j}}, \quad i = \overline{1,M}  \\ 
+	\hat{\pi}_{i} = \hat{\pi}_{0} \dfrac{\lambda^{i}\prod \limits_{j=1}^{i} (K-j+1)}{\prod \limits_{j=1}^i \xi_{j}}, \quad i = \overline{1,K}  \\ 
 	\xi_{ср}^{*}=\sum \limits_{i=1}^K \xi_i \hat{\pi_i}
    \end{array}
 \right.
@@ -155,12 +155,12 @@
 
 \begin{equation}
 \label{eq:mu}
-\mu_i = \mu \sum \limits_{j=0}^M p_j min \left\lbrace i, j \right\rbrace
+\mu_i = \mu \sum \limits_{j=0}^M p_j min \left\lbrace i, M-j \right\rbrace
 \end{equation}
 
 \begin{equation}
 \label{eq:nu}
-\nu_i = \nu \sum \limits_{j=0}^N \pi_j min \left\lbrace K-i, j \right\rbrace
+\nu_i = \nu \sum \limits_{j=0}^N \pi_j min \left\lbrace n-i+1, N-j \right\rbrace
 \end{equation}
 
 
@@ -188,7 +188,7 @@
 \left\{
    \begin{array}{lcl}
 	\hat{p}_{0} = \left( 1 + \dfrac{\nu_1}{\mu_1} +  ... + \dfrac{\prod \limits_{i=1}^n \nu_i}{\prod \limits_{i=1}^n \mu_i} \right) ^{-1} \\
-	\hat{p}_{i} = \hat{p}_{0} \dfrac{\prod \limits_{j=1}^{i} (\nu_i)}{\prod \limits_{j=1}^i \mu_{j}}, \quad i = \overline{1,n}  \\ 
+	\hat{p}_{i} = \hat{p}_{0} \dfrac{\prod \limits_{j=1}^{i} (\nu_j)}{\prod \limits_{j=1}^i \mu_{j}}, \quad i = \overline{1,n}  \\ 
 	\xi_n = \sum \limits_{i=1}^n \hat{p}_i \mu_i
    \end{array}
 \right.
