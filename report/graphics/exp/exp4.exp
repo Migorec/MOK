@@ -1,0 +1,17 @@
+EParam{base = MParam { m = 4, 
+		               n = 4, 
+		               k = 10, 
+                       l=5, 
+                       lambda = 1, 
+                       mu = 3, 
+                       nu = 3, 
+                       alpha = 10, 
+                       beta = 10,
+                       gamma = 0,
+                       delta = 1
+                     },
+        param = Alpha,
+        init = 5,
+        fin = 25,
+        h = 1
+       }
