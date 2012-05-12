@@ -9,6 +9,8 @@ PDFTRIMWHITE=report/utils/pdftrimwhite
 # Output file
 PDF=rpz.pdf
 
+GRAPHeR=report/utils/grapher
+
 # Input paths
 EXP=report/graphics/exp
 DIA=report/graphics/dia
@@ -53,11 +55,11 @@ $(INC)/dia/%.eps: $(DIA)/%.dia
 	dia -e $(@:%.pdf=%.eps) -t eps $<
 
 
-grapher: $(HS) src/MOK.cabal
+$(GRAPHER): $(HS) src/MOK.cabal
 	cd src && cabal configure && cabal build && cp dist/build/grapher/grapher ../report/utils
 
 # .exp -> .svg -> .pdf
-$(INC)/exp/%.svg: $(EXP)/%.exp grapher
+$(INC)/exp/%.svg: $(EXP)/%.exp $(GRAPHER)
 	mkdir -p $(INC)/exp
 	report/utils/grapher $< $@
 	
