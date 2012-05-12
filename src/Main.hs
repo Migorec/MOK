@@ -6,13 +6,13 @@ import Model.Theoretical
 
 tp1 = MParam {      m = 1, 
 		            n = 1, 
-		            k = 2, 
+		            k = 1, 
                     l=1, 
-                    lambda = 1, 
-                    mu = 5, 
-                    nu = 5, 
-                    alpha = 0.0, 
-                    beta = 0.1,
+                    lambda = 1000, 
+                    mu = 1, 
+                    nu = 1, 
+                    alpha = 10, 
+                    beta = 10,
                     gamma = 0.0,
                     delta = 0.1
                    }
@@ -33,7 +33,7 @@ testParam = MParam {m = 5,
 main =  do 
            --print $ breakProb tp1
            --print $ map (xi tp1 (breakProb tp1)) [1..5]
-           print $ solve testParam
+           print $ solve tp1
            
-           res <- imitate testParam
+           res <- imitate tp1
            print res

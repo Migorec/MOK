@@ -36,16 +36,17 @@ Build-type:          Simple
 Cabal-version:       >=1.2
 
 
-Executable MOK
+Executable grapher
   -- .hs or .lhs file containing the Main module.
-  Main-is: Main.hs             
+  Main-is: Test.hs             
   
   -- Packages needed in order to build this package.
-  Build-depends: base, mtl, haskell98, aivika       
+  Build-depends: base, mtl, haskell98, aivika, gnuplot, array       
   
   -- Modules not exported by this package.
   Other-modules: Model.Model, Model.Imitational       
   
+  ghc-options: -O2
   -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
   -- Build-tools:         
   

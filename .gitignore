@@ -1,5 +1,10 @@
 *~
+*.o
+*.hi
 src/dist/
+src/Main
+report/utils/grapher
+report/rpz.pdf
 report/.deps/
 report/tex/inc/
 report/tex/*.aux

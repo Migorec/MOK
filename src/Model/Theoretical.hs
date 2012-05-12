@@ -31,12 +31,12 @@ procProb param cP = p0:(map (p0*) summands)
 
 chanProb :: MParam -> [Double] -> [Double]
 chanProb param pP = pi0:(map (pi0*) summands)
-    where deltas = map (\j -> beta param * (sum $ zipWith (\p i -> p * j / (i+j) 
+    where deltas = map (\j -> delta param * (sum $ zipWith (\p i -> p * j / (i+j) 
                                                                      * min (i+j) (fromIntegral $ l param))
                                                          pP [0 .. fromIntegral $ m param])
                       ) [1.. fromIntegral $ n param]
           ns = reverse [1..fromIntegral $ n param]
-          summands = map (\j -> (alpha param)^j * 
+          summands = map (\j -> (gamma param)^j * 
                                 (product $ take j ns) / 
                                 (product $ take j deltas) ) [1..n param]
           pi0 = 1 / (1 + (sum summands))
