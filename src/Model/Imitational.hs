@@ -97,130 +97,52 @@ model param (ps,cs)=
                                                               filter (\(j,_,_) -> i==j) cs) [1..n param]         
                  queue <- newQueue
                  
-                 workTime <- newRef queue 0.0
                  reqDone <- newRef queue 0
                  procAvaliable <- newRef queue [1 .. m param]
                  chanAvaliable <- newRef queue [1 .. n param]
 
                  procs <- newResource queue $ m param
                  channels <- newResource queue $ n param
-                 mutex <- newResource queue 1
                  
                  pids <- replicateM (k param) $ newProcessID queue
                  
-                 
-
                  let request :: Process()
                      request = do 
                      
                                   thinkTime <- liftIO $ exprnd $ lambda param
-                                  --liftIO $ putStrLn $ "tt:" ++ show thinkTime
                                   holdProcess thinkTime
                                   
                                   requestResource procs
-                                  --startTime <- liftD time
-                                  
-                                  --requestResource mutex
-                                  
                                   pr <- liftD $ readRef procAvaliable
                                   liftD $ writeRef procAvaliable $ tail pr
                                   let i = head pr
-                                  
-                                  
-                                  
                                   procTime <- liftIO $ exprnd $ mu param
-                                  --liftIO $ putStrLn $ "pt:" ++ show procTime
-                                  --releaseResource mutex
-                                  t <- liftD time
-                                  
-                                  --let rt = countTime t procTime $ pa ! i
-                                  
-                                  --liftIO $ putStrLn $ "rt:" ++ show rt
-                                  
+                                  t <- liftD time                                  
                                   holdProcess $ countTime t procTime $ pa ! i
                                   liftD $ modifyRef procAvaliable (i:)
                                   releaseResource procs
                                   
 
                                   requestResource channels
-                                  
-                                  --requestResource mutex
-                                  
                                   ch <- liftD $ readRef chanAvaliable
                                   liftD $ writeRef chanAvaliable $ tail ch
                                   let i = head ch
-                                  
                                   channelTime <- liftIO $ exprnd $ nu param
-                                  
-                                  --liftIO $ putStrLn $ "ct:" ++ show channelTime
-                                  
-                                  --releaseResource mutex
                                   t <- liftD time
-                                  --let rt =  countTime t channelTime $ map (\(_,x,y) -> (x,y)) $
-                                  --                                        filter (\(j,_,_) -> j == i) cs
-                                 -- liftIO $ putStrLn $ "rct:" ++ show rt
                                   holdProcess $ countTime t channelTime $ ca ! i
                                   liftD $ modifyRef chanAvaliable (i:)
                                   releaseResource channels
                                   
                                   
-                                  --endTime <- liftD time
                                   t <- liftD time
                                   liftD $ modifyRef reqDone (1+)
-                                  --liftD $ modifyRef workTime (+ (endTime - startTime))
 
                                   request
-                 let cPhase :: Process()
-                     cPhase = do  requestResource channels
-                                  
-                                  t <- liftD time
-                                  ch <- liftD $ readRef chanAvaliable
-                                  liftD $ writeRef chanAvaliable $ tail ch
-                                  let i = head ch
-                                  
-                                  channelTime <- liftIO $ exprnd $ nu param
-                                  
-                                  
-                                  holdProcess $ countTime t channelTime $ map (\(_,x,y) -> (x,y)) $
-                                                                          filter (\(j,_,_) -> j == i) cs
-                                  liftD $ modifyRef chanAvaliable (i:)
-                                  releaseResource channels
-                                  
-                                  liftD $ modifyRef reqDone (1+)
-                                  request                 
-                 let pPhase :: Process()
-                     pPhase = do  requestResource procs
-                                                                    
-                                  t <- liftD time
-                                  pr <- liftD $ readRef procAvaliable
-                                  liftD $ writeRef procAvaliable $ tail pr
-                                  let i = head pr
-                                  
-                                  procTime <- liftIO $ exprnd $ mu param
-                                  
-                                  holdProcess $ countTime t procTime $ map (\(_,x,y) -> (x,y)) $ 
-                                                                       filter (\(j,_,_) -> j == i) ps 
-                                  liftD $ modifyRef procAvaliable (i:)
-                                  releaseResource procs
-                                  cPhase
-                 
-                 let tPhase :: Process()
-                     tPhase = do thinkTime <- liftIO $ exprnd $ lambda param
-                                 holdProcess thinkTime
-                                 pPhase
 
                  t0 <- starttime
 
-                 --liftIO $ putStrLn $ show $ length pids
                  mapM_ (\p -> runProcess request p t0) pids
                 
-                 {-mapM_ (\p -> do x <- (liftIO $ getStdRandom (randomR (0,1)))
-                                 let f :: Double -> Dynamics () 
-                                     f x | x < 0.33 = runProcess tPhase p t0
-                                         | x < 0.66 = runProcess pPhase p t0
-                                         | otherwise = runProcess cPhase p t0
-                                 f x        ) pids
-                    -}
                  let system :: Dynamics Double
                      system = do x <- readRef workTime
                                  n <- readRef reqDone
