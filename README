@@ -1,0 +1,4 @@
+Должны стоять: haskell-plarform, tex, perl, gnuplot, GNUMake, dia
+
+При первой сборке должно быть подключение к Интернет.
+После установки haskell-plaatform выполнить cabal update. 
