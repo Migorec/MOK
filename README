@@ -1,7 +1,7 @@
-Должны стоять: haskell-plarform, tex, perl, gnuplot, GNUMake, dia
+Должны стоять: haskell-platform, tex, perl, gnuplot, GNUMake, dia
 
 При первой сборке должно быть подключение к Интернет.
-После установки haskell-plaatform выполнить cabal update.
+После установки haskell-platform выполнить cabal update.
 
 Для имитационого моделирования использована библиотеа aivika.
 https://github.com/dsorokin/aivika/blob/master/doc/aivika.pdf 
