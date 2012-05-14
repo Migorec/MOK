@@ -18,7 +18,8 @@ data MParam = MParam { m :: Int, -- Число процессоров
 -}
 
 procProb :: MParam -> [Double] -> [Double]
-procProb param cP = p0:(map (p0*) summands)
+procProb param cP | alpha param == 0 = 1:(replicate (m param) 0)
+                  | otherwise = p0:(map (p0*) summands)
     where betas = map (\i -> beta param * (sum $ zipWith (\pi j -> pi * i / (i+j) 
                                                                       * min (i+j) (fromIntegral $ l param))
                                                          cP [0 .. fromIntegral $ n param])
@@ -30,7 +31,8 @@ procProb param cP = p0:(map (p0*) summands)
           p0 = 1 / (1 + (sum summands))
 
 chanProb :: MParam -> [Double] -> [Double]
-chanProb param pP = pi0:(map (pi0*) summands)
+chanProb param pP | gamma param == 0 = 1:(replicate (n param) 0)
+                  | otherwise = pi0:(map (pi0*) summands)
     where deltas = map (\j -> delta param * (sum $ zipWith (\p i -> p * j / (i+j) 
                                                                      * min (i+j) (fromIntegral $ l param))
                                                          pP [0 .. fromIntegral $ m param])
@@ -43,7 +45,8 @@ chanProb param pP = pi0:(map (pi0*) summands)
 
 
 breakProb :: MParam -> ([Double],[Double])
-breakProb param = iter initVal
+breakProb param | l param == 0 = (1 : (replicate (m param) 0),1 : (replicate (n param) 0))
+                | otherwise = iter initVal
     where initVal = replicate (n param) (1 / (fromIntegral $ n param))--1 : (replicate (n param ) 0) --replicate (n param) (1 / (fromIntegral $ n param))
           iter cP = let pP' = procProb param cP
                         cP' = chanProb param pP'
@@ -76,6 +79,9 @@ xiStar param xis = sum $ zipWith (*) xis hatPis
           hatPis = map (hatPi0 *) summands
           
 solve :: MParam -> Double
-solve param = xiStar param xis
+solve param | l param == 0 && (alpha param /= 0 || gamma param /= 0) = 0
+            | alpha param /= 0 && beta param == 0 = 0
+            | gamma param /= 0 && delta param == 0 = 0
+            | otherwise = xiStar param xis
     where (ps,pis) = breakProb param
           xis = map (xi param (ps,pis)) [1 .. k param]
