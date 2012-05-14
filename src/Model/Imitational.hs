@@ -144,7 +144,7 @@ model param (ps,cs)=
                  mapM_ (\p -> runProcess request p t0) pids
                 
                  let system :: Dynamics Double
-                     system = do x <- readRef workTime
+                     system = do 
                                  n <- readRef reqDone
                                  t <- stoptime
                                  return ( (fromIntegral n) / (t))
