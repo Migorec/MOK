@@ -62,6 +62,7 @@ report/utils/grapher: $(HS) src/MOK.cabal
 $(INC)/exp/%.svg: $(EXP)/%.exp report/utils/grapher
 	mkdir -p $(INC)/exp
 	report/utils/grapher $< $@
+	rm curve.gp curve0.csv curve1.csv
 	
 $(INC)/exp/%.pdf: $(INC)/exp/%.svg
 	inkscape -A $(INC)/exp/$*-tmp.pdf $< && cd $(INC)/exp && ../../../../$(PDFTRIMWHITE) $*-tmp.pdf $*.pdf && rm $*-tmp.pdf
