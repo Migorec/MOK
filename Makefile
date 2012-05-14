@@ -55,11 +55,11 @@ $(INC)/dia/%.eps: $(DIA)/%.dia
 	dia -e $(@:%.pdf=%.eps) -t eps $<
 
 
-$(GRAPHER): $(HS) src/MOK.cabal
+report/utils/grapher: $(HS) src/MOK.cabal
 	cd src && cabal configure && cabal build && cp dist/build/grapher/grapher ../report/utils
 
 # .exp -> .svg -> .pdf
-$(INC)/exp/%.svg: $(EXP)/%.exp $(GRAPHER)
+$(INC)/exp/%.svg: $(EXP)/%.exp report/utils/grapher
 	mkdir -p $(INC)/exp
 	report/utils/grapher $< $@
 	
