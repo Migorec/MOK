@@ -78,6 +78,16 @@ xiStar param xis = sum $ zipWith (*) xis hatPis
           hatPi0 = 1/(1 + (sum summands))
           hatPis = map (hatPi0 *) summands
           
+tReact :: MParam -> [Double] -> Double
+tReact param xis = ns / ((fromIntegral $ k param) - ns) / (lambda param)
+    where ns = sum $ zipWith (*) [1.. fromIntegral $ k param] hatPis 
+          ks = reverse [1 .. fromIntegral $ k param ]
+          summands = map (\i -> (lambda param)^i * 
+                                (product $ take i ks) / 
+                                (product $ take i xis)) [1..fromIntegral $ k param]
+          hatPi0 = 1/(1 + (sum summands))
+          hatPis = map (hatPi0 *) summands
+          
 solve :: MParam -> Double
 solve param | l param == 0 && (alpha param /= 0 || gamma param /= 0) = 0
             | alpha param /= 0 && beta param == 0 = 0
