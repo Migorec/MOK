@@ -35,6 +35,14 @@ Build-type:          Simple
 -- Constraint on the version of Cabal needed to build this package.
 Cabal-version:       >=1.2
 
+Executable GUI
+    Main-is: GUI.hs
+    
+    Build-depends: base, mtl, haskell98, aivika, gnuplot, array, wx
+    
+    Other-modules: Model.Model, Model.Imitational, Model.Theoretical  
+    
+    ghc-options: -O2
 
 Executable grapher
   -- .hs or .lhs file containing the Main module.
@@ -44,7 +52,7 @@ Executable grapher
   Build-depends: base, mtl, haskell98, aivika, gnuplot, array       
   
   -- Modules not exported by this package.
-  Other-modules: Model.Model, Model.Imitational       
+  Other-modules: Model.Model, Model.Imitational, Model.Theoretical       
   
   ghc-options: -O2
   -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
