@@ -54,7 +54,12 @@ $(INC)/dia/%.eps: $(DIA)/%.dia
 	mkdir -p $(INC)/dia
 	dia -e $(@:%.pdf=%.eps) -t eps $<
 
-
+runGUI: GUI
+	./GUI
+    
+GUI: $(HS) src/MOK.cabal
+	cd src && cabal configure && cabal build && cp dist/build/GUI/GUI ../GUI
+    
 report/utils/grapher: $(HS) src/MOK.cabal
 	cd src && cabal configure && cabal build && cp dist/build/grapher/grapher ../report/utils
 
